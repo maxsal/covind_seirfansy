@@ -3,7 +3,7 @@
     "path": "~/Downloads/covind_seirfansy/scripts/state_gen.R",
     "project_path": "scripts/state_gen.R",
     "type": "r_source",
-    "hash": "4108780487",
+    "hash": "4184686561",
     "contents": "",
     "dirty": false,
     "created": 1618795371363.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "11,25",
-        "scrollLine": "0"
+        "cursorPosition": "74,15",
+        "scrollLine": "58"
     },
     "folds": "",
-    "lastKnownWriteTime": 1618841922,
+    "lastKnownWriteTime": 1618842343,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1618841922407,
+    "last_content_update": 1618842343204,
     "read_only": false,
     "read_only_alternatives": []
 }

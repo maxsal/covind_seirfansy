@@ -6,8 +6,8 @@ for (i in seq_along(f)) { source(here("functions", f[i])) }
 
 # specs -----------
 state    <- "AN"
+max_date <- Sys.Date() - 1
 min_date <- "2020-04-01"
-max_date <- "2021-04-15"
 N        <- pop %>% filter(abbrev == tolower(state)) %>% pull(population)
 n_iter   <- 1e3 #default 1e5
 burn_in  <- 1e2 #default 1e5

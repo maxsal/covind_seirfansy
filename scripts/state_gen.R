@@ -4,13 +4,11 @@ source("libraries.R")
 f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
-state_pop <- read_csv("https://raw.githubusercontent.com/umich-cphds/cov-ind-19/master/model/r_scripts/one_off/state_pop.csv")
-
 # specs -----------
 state    <- "AN"
 min_date <- "2020-04-01"
 max_date <- "2021-04-15"
-N        <- 434e3
+N        <- pop %>% filter(abbrev == tolower(state)) %>% pull(population)
 n_iter   <- 1e3 #default 1e5
 burn_in  <- 1e2 #default 1e5
 opt_num  <- 1   #default 200

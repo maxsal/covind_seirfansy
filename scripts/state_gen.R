@@ -5,7 +5,7 @@ f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
 # specs -----------
-state    <- "AN"
+state    <- "DL"
 max_date <- as.Date(Sys.Date() - 1)
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))

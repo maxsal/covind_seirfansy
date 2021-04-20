@@ -14,11 +14,12 @@ N        <- pop %>% filter(abbrev == tolower(state)) %>% pull(population)
 n_iter   <- 1e3 #default 1e5
 burn_in  <- 1e2 #default 1e5
 opt_num  <- 1   #default 200
-plt      <- FALSE
+plt      <- TRUE
 save_plt <- FALSE
 
 #############
-data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_daily.csv") %>%
+data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_daily.csv",
+                        col_types = cols()) %>%
   janitor::clean_names() %>%
   dplyr::select("date" = "date_ymd", "status", "val" = tolower(state)) %>%
   arrange(date) %>%
@@ -62,24 +63,43 @@ write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".r
 prediction <- result$prediction
 dim(prediction)
 
+pred_clean <- clean_prediction(prediction,
+                               state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
+                               obs_days = obs_days,
+                               t_pred = t_pred)
 
-P_pred <- prediction[515*3+1:515, ] %>% rowMeans()
-R_pred <- prediction[515*6+1:515, ] %>% rowMeans()
-D_pred <- prediction[515*8+1:515, ] %>% rowMeans()
-T_d <- R_pred + D_pred + P_pred
-total_pred  <- rowSums(matrix(rowMeans(prediction), nrow = 515)[, 3:9])
-UF_p <- total_pred / T_d
+p_pred <- pred_clean %>%
+  filter(section == "positive_reported") %>%
+  dplyr::select(-(1:4)) %>%
+  rowMeans()
 
-D_U <- prediction[515*7 + 1:515, ] %>% rowMeans()
-total_death <- D_U+D_pred
-UF_d <- total_death / D_pred
-ifr  <- total_death / total_pred
+r_pred <- pred_clean %>%
+  filter(section == "recovered_reported") %>%
+  dplyr::select(-(1:4)) %>%
+  rowMeans()
+
+d_pred <- pred_clean %>%
+  filter(section == "death_reported") %>%
+  dplyr::select(-(1:4)) %>%
+  rowMeans()
+
+t_d <- r_pred + d_pred + p_pred
+total_pred <- rowSums(matrix(rowMeans(prediction), nrow = obs_days + t_pred)[, 3:9])
+UF_p <- total_pred / t_d
+
+d_u <- pred_clean %>%
+  filter(section == "death_unreported") %>%
+  dplyr::select(-(1:4)) %>%
+  rowMeans()
+total_death <- d_u + d_pred
+UF_d <- total_death / d_pred
+ifr <- total_death / total_pred
 
 impo <- tibble(
-  "UnderReporting_Cases" = UF_p[366],
-  "UnderReporting_Deaths" = UF_d[366],
-  "ifr" = ifr[366]
-  )
+  "underreporting_cases"  = UF_p[obs_days + 1],
+  "underreporting_deaths" = UF_d[obs_days + 1],
+  "ifr"                   = ifr[obs_days + 1]
+)
 
 write_rds(impo, here("output", paste0("important_", state, ".rds")),
           compress = "gz")

@@ -1,5 +1,0 @@
-library(ids)
-
-epiq_ids <- random_id(n = 60000, bytes = 24)
-
-write_tsv(tibble(ids = epiq_ids), "~/Downloads/epiq_ids.txt")

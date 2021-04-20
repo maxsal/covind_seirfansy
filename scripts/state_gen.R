@@ -14,7 +14,7 @@ N        <- pop %>% filter(abbrev == tolower(state)) %>% pull(population)
 n_iter   <- 1e3 #default 1e5
 burn_in  <- 1e2 #default 1e5
 opt_num  <- 1   #default 200
-plt      <- TRUE
+plt      <- FALSE
 save_plt <- FALSE
 
 data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_daily.csv",

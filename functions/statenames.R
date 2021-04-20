@@ -23,3 +23,11 @@ pop <- structure(list(full = c("Andhra Pradesh", "Arunachal Pradesh",
                  row.names = c(NA, 
                                -42L),
                  class = "data.frame")
+
+get_pop <- function(state) {
+  
+  pop %>%
+    filter(abbrev == tolower(state)) %>%
+    pull(population)
+  
+}

@@ -1,5 +1,8 @@
 ~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2FR0_calculateR.R="97CB5A36"
 ~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fclean_prediction.R="2CEE8004"
+~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fget_init.R="B72CA6E1"
+~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fget_phase.R="1F878F47"
+~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fget_pop.R="D79EC4D0"
 ~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fmcmc_performR.R="BC45FAB4"
 ~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fmodel_deterministic_simulateR.R="D3987CDB"
 ~%2FDownloads%2Fcovind_seirfansy%2Ffunctions%2Fmodel_estimateR.R="19E2C686"

@@ -1,5 +1,8 @@
 /Users/maxsalvatore/Downloads/covind_seirfansy/functions/R0_calculateR.R="800B06D2"
 /Users/maxsalvatore/Downloads/covind_seirfansy/functions/clean_prediction.R="30128D0C"
+/Users/maxsalvatore/Downloads/covind_seirfansy/functions/get_init.R="99F06FFC"
+/Users/maxsalvatore/Downloads/covind_seirfansy/functions/get_phase.R="5A6C24E6"
+/Users/maxsalvatore/Downloads/covind_seirfansy/functions/get_pop.R="C5D5746B"
 /Users/maxsalvatore/Downloads/covind_seirfansy/functions/mcmc_performR.R="773D469D"
 /Users/maxsalvatore/Downloads/covind_seirfansy/functions/model_deterministic_simulateR.R="CBC8618E"
 /Users/maxsalvatore/Downloads/covind_seirfansy/functions/model_estimateR.R="75BBB910"

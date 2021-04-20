@@ -10,13 +10,14 @@ max_date <- as.Date(Sys.Date() - 1)
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
-N        <- pop %>% filter(abbrev == tolower(state)) %>% pull(population)
+N        <- get_pop(state)
 n_iter   <- 1e3 #default 1e5
 burn_in  <- 1e2 #default 1e5
 opt_num  <- 1   #default 200
 plt      <- FALSE
 save_plt <- FALSE
 
+# load and prepare ----------
 data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_daily.csv",
                         col_types = cols()) %>%
   janitor::clean_names() %>%
@@ -28,31 +29,13 @@ data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_dail
     id_cols = "date"
   )
 
-pre_data <- data %>%
-  filter(date < min_date) %>%
-  dplyr::select(-date) %>%
-  summarize(
-    Confirmed = sum(Confirmed),
-    Recovered = sum(Recovered),
-    Deceased  = sum(Deceased)
-  ) %>%
-  as.numeric(as.vector(.))
-
-data %<>% filter(date >= min_date & date <= max_date)
-
-data_initial <- c(pre_data,
-                  data %>%
-                    filter(date == min_date) %>%
-                    dplyr::select(-date) %>%
-                    as.numeric(as.vector(.))
-                  )
-if (data_initial[1] == 0) {data_initial[1] <- 1}
-if (data_initial[4] == 0) {data_initial[4] <- 1} # check with Ritwik/Ritoban if this is necessary
+data_initial <- get_init(data)
 
 mCFR <- tail(cumsum(data$Deceased) / cumsum(data$Deceased + data$Recovered), 1)
 
-phases <- c(1, 15, 34, 48, 62, 92, 123, 154, 184, 215, 245, 276, 307, 335)
+phases <- get_phase(state_date = "2020-04-01")
 
+# predict -----------
 res    <- SEIRfansy.predict(
   data            = abs(data %>% dplyr::select(-date)),
   init_pars       = NULL,
@@ -81,6 +64,7 @@ write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".r
 prediction <- result$prediction
 dim(prediction)
 
+# prepare and important metrics ----------
 pred_clean <- clean_prediction(prediction,
                                state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
                                obs_days = obs_days,

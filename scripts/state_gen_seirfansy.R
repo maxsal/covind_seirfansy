@@ -5,8 +5,8 @@ f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
 # specs -----------
-state    <- "AN"
-max_date <- as.Date(Sys.Date() - 1)
+state    <- "AN" # <---
+max_date <- as.Date(Sys.Date() - 1) # <---
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
@@ -27,16 +27,19 @@ data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_dail
     names_from  = "status",
     values_from = "val",
     id_cols = "date"
-  )
+  ) %>%
+  dplyr::filter(date <= max_date)
 
 data_initial <- get_init(data)
 
+data <- data %>% dplyr::filter(date >= min_date)
+
 mCFR <- tail(cumsum(data$Deceased) / cumsum(data$Deceased + data$Recovered), 1)
 
-phases <- get_phase(state_date = "2020-04-01")
+phases <- get_phase(start_date = "2020-04-01")
 
 # predict -----------
-res    <- SEIRfansy.predict(
+result    <- SEIRfansy.predict(
   data            = abs(data %>% dplyr::select(-date)),
   init_pars       = NULL,
   data_init       = data_initial,
@@ -64,11 +67,14 @@ write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".r
 prediction <- result$prediction
 dim(prediction)
 
+
+
 # prepare and important metrics ----------
 pred_clean <- clean_prediction(prediction,
                                state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
                                obs_days = obs_days,
                                t_pred = t_pred)
+write_csv(pred_clean, here("output", paste0("prediction_", state, ".csv")))
 
 p_pred <- pred_clean %>%
   filter(section == "positive_reported") %>%
@@ -103,5 +109,6 @@ impo <- tibble(
   "ifr"                   = ifr[obs_days + 1]
 )
 
-write_rds(impo, here("output", paste0("important_", state, ".rds")),
-          compress = "gz")
+write_csv(impo, here("output", paste0("important_", state, ".csv")))
+# write_rds(impo, here("output", paste0("important_", state, ".rds")),
+#           compress = "gz")

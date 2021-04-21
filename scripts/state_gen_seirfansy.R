@@ -5,7 +5,7 @@ f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
 # specs -----------
-state    <- "AN" # <---
+state    <- "MH" # <---
 max_date <- as.Date(Sys.Date() - 1) # <---
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
@@ -67,8 +67,6 @@ write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".r
 prediction <- result$prediction
 dim(prediction)
 
-
-
 # prepare and important metrics ----------
 pred_clean <- clean_prediction(prediction,
                                state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
@@ -110,5 +108,3 @@ impo <- tibble(
 )
 
 write_csv(impo, here("output", paste0("important_", state, ".csv")))
-# write_rds(impo, here("output", paste0("important_", state, ".rds")),
-#           compress = "gz")

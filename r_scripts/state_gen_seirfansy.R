@@ -15,6 +15,7 @@ if ( Sys.getenv("production") == "TRUE" ) {
 	opt_num   <- 1   #default 200
 }
 
+data_repo <- Sys.getenv("data_repo")
 today <- as.Date(Sys.getenv("today"))
 # specs -----------
 state    <- Sys.getenv("state")
@@ -72,10 +73,9 @@ result    <- SEIRfansy.predict(
   save_plots      = save_plt
 )
 
-#danbarke should change output location to data_repo
-write_rds(result$prediction, here("output", paste0("prediction_", state, ".rds")),
+write_rds(result$prediction, paste0(data_repo, today, "/prediction_", state, ".rds"),
          compress = "gz")
-write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".rds")),
+write_rds(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".rds"),
           compress = "gz")
 
 prediction <- result$prediction
@@ -86,8 +86,7 @@ pred_clean <- clean_prediction(prediction,
                                state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
                                obs_days = obs_days,
                                t_pred = t_pred)
-#danbarke should change output location to data_repo
-write_csv(pred_clean, here("output", paste0("prediction_", state, ".csv")))
+write_csv(pred_clean, paste0(data_repo, today, "/prediction_", state, ".csv"))
 
 p_pred <- pred_clean %>%
   filter(section == "positive_reported") %>%
@@ -122,5 +121,4 @@ impo <- tibble(
   "ifr"                   = ifr[obs_days + 1]
 )
 
-#danbarke should change output location to data_repo
-write_csv(impo, here("output", paste0("important_", state, ".csv")))
+write_csv(impo, paste0(data_repo, today, "/important_", state, ".csv"))

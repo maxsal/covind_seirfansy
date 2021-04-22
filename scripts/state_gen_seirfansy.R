@@ -4,9 +4,25 @@ source("libraries.R")
 f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
+# Set variables based on testing or production
+if ( Sys.getenv("production") == "TRUE" ) {
+        data_repo <- "~/cov-ind-19-data/"
+        code_repo <- "~/cov-ind-19/"
+	n_iter    <- 1e5
+	burn_in   <- 1e5
+	opt_num   <- 200
+} else {
+        data_repo <- "~/cov-ind-19-test/"
+        code_repo <- "~/cov-ind-19-iris/"
+	n_iter    <- 1e3 #default 1e5
+	burn_in   <- 1e2 #default 1e5
+	opt_num   <- 1   #default 200
+}
+
+today <- as.Date(Sys.getenv("today"))
 # specs -----------
-state    <- "AN" # <---
-max_date <- as.Date(Sys.Date() - 1) # <---
+state    <- Sys.getenv("state")
+max_date <- as.Date(today - 1)
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days

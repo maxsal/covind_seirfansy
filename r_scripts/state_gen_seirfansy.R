@@ -24,9 +24,6 @@ min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
 N        <- get_pop(state)
-n_iter   <- 1e5 #default 1e5
-burn_in  <- 1e5 #default 1e5
-opt_num  <- 200   #default 200
 plt      <- FALSE
 save_plt <- FALSE
 

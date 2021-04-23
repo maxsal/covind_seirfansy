@@ -4,9 +4,27 @@ source("libraries.R")
 f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
+# Set variables based on testing or production
+if ( Sys.getenv("production") == "TRUE" ) {
+	n_iter    <- 1e5
+	burn_in   <- 1e5
+	opt_num   <- 200
+} else {
+	n_iter    <- 1e3 #default 1e5
+	burn_in   <- 1e2 #default 1e5
+	opt_num   <- 1   #default 200
+}
+
+data_repo <- Sys.getenv("data_repo")
+today <- as.Date(Sys.getenv("today"))
 # specs -----------
+<<<<<<< HEAD:scripts/state_gen_seirfansy.R
 state    <- "TN" # <---
 max_date <- as.Date(Sys.Date() - 1) # <---
+=======
+state    <- Sys.getenv("state")
+max_date <- as.Date(today - 1)
+>>>>>>> 234c7e992a5945aa07655d1d5c022f77b9e17583:r_scripts/state_gen_seirfansy.R
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
@@ -18,6 +36,7 @@ plt      <- FALSE
 save_plt <- FALSE
 
 # load and prepare ----------
+#danbarke should change this to use a prepull data job and store the data locally. This will ensure all of the jobs are using the same data each time the workload is run.
 data <- readr::read_csv("https://api.covid19india.org/csv/latest/state_wise_daily.csv",
                         col_types = cols()) %>%
   janitor::clean_names() %>%
@@ -59,9 +78,9 @@ result    <- SEIRfansy.predict(
   save_plots      = save_plt
 )
 
-write_rds(result$prediction, here("output", paste0("prediction_", state, ".rds")),
+write_rds(result$prediction, paste0(data_repo, today, "/prediction_", state, ".rds"),
          compress = "gz")
-write_rds(result$mcmc_pars, here("output", paste0("prediction_pars_", state, ".rds")),
+write_rds(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".rds"),
           compress = "gz")
 
 prediction <- result$prediction
@@ -72,7 +91,7 @@ pred_clean <- clean_prediction(prediction,
                                state = pop %>% filter(abbrev == tolower(state)) %>% pull(full) %>% unique(),
                                obs_days = obs_days,
                                t_pred = t_pred)
-write_csv(pred_clean, here("output", paste0("prediction_", state, ".csv")))
+write_csv(pred_clean, paste0(data_repo, today, "/prediction_", state, ".csv"))
 
 p_pred <- pred_clean %>%
   filter(section == "positive_reported") %>%
@@ -107,4 +126,4 @@ impo <- tibble(
   "ifr"                   = ifr[obs_days + 1]
 )
 
-write_csv(impo, here("output", paste0("important_", state, ".csv")))
+write_csv(impo, paste0(data_repo, today, "/important_", state, ".csv"))

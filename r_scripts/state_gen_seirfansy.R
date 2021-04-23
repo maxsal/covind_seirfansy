@@ -18,17 +18,12 @@ if ( Sys.getenv("production") == "TRUE" ) {
 data_repo <- Sys.getenv("data_repo")
 today <- as.Date(Sys.getenv("today"))
 # specs -----------
-<<<<<<< HEAD:scripts/state_gen_seirfansy.R
-state    <- "TN" # <---
-max_date <- as.Date(Sys.Date() - 1) # <---
-=======
 state    <- Sys.getenv("state")
 max_date <- as.Date(today - 1)
->>>>>>> 234c7e992a5945aa07655d1d5c022f77b9e17583:r_scripts/state_gen_seirfansy.R
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
-N        <- get_pop(state) %>% unique()
+N        <- get_pop(state)
 n_iter   <- 1e5 #default 1e5
 burn_in  <- 1e5 #default 1e5
 opt_num  <- 200   #default 200

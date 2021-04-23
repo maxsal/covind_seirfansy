@@ -14,7 +14,7 @@ n_date <- 61
 data_case <- matrix(nrow = nrow(pop), ncol = n_date)
 
 # loop over states
-state_codes <- c("AN", "DL", "MH")
+state_codes <- c("TN")
 
 for (i in seq_along(state_codes)) {
   

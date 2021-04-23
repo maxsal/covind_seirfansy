@@ -5,15 +5,15 @@ f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
 # specs -----------
-state    <- "MH" # <---
+state    <- "TN" # <---
 max_date <- as.Date(Sys.Date() - 1) # <---
 min_date <- as.Date("2020-04-01")
 obs_days <- length(as.Date(min_date):as.Date(max_date))
 t_pred   <- 150 # number of predicted days
-N        <- get_pop(state)
-n_iter   <- 1e3 #default 1e5
-burn_in  <- 1e2 #default 1e5
-opt_num  <- 1   #default 200
+N        <- get_pop(state) %>% unique()
+n_iter   <- 1e5 #default 1e5
+burn_in  <- 1e5 #default 1e5
+opt_num  <- 200   #default 200
 plt      <- FALSE
 save_plt <- FALSE
 
@@ -69,7 +69,7 @@ dim(prediction)
 
 # prepare and important metrics ----------
 pred_clean <- clean_prediction(prediction,
-                               state = pop %>% filter(abbrev == tolower(state)) %>% pull(full),
+                               state = pop %>% filter(abbrev == tolower(state)) %>% pull(full) %>% unique(),
                                obs_days = obs_days,
                                t_pred = t_pred)
 write_csv(pred_clean, here("output", paste0("prediction_", state, ".csv")))

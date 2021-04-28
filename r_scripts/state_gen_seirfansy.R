@@ -70,6 +70,13 @@ result    <- SEIRfansy.predict(
   save_plots      = save_plt
 )
 
+# directory ----------
+wd <- paste0(data_repo, today)
+if (!dir.exists(wd)) {
+  dir.create(wd, recursive = TRUE)
+  message("Creating ", wd)
+}
+
 write_rds(result$prediction, paste0(data_repo, today, "/prediction_", state, ".rds"),
          compress = "gz")
 write_rds(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".rds"),

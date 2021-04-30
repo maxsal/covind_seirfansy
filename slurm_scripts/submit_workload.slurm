@@ -40,4 +40,4 @@ done
 echo $state_jobs
 sbatch --dependency=afterok:$state_jobs $code_repo/slurm_scripts/gitpush.slurm
 
-sbatch --begin=now+24hour ~/$code_repo/slurm_scripts/submit_workload.slurm
+sbatch --begin=now+24hour $code_repo/slurm_scripts/submit_workload.slurm

@@ -27,13 +27,13 @@ clean_prediction <- function(x, state, obs_days, t_pred) {
     dplyr::select(state, section, date, pred, everything()) %>%
     rowwise(state, section, date, pred) %>%
     summarize(
-      min    = min(c_across(4:ncol(x))),
-      p2.5   = quantile(c_across(4:ncol(x)), 0.025),
-      median = median(c_across(4:ncol(x))),
-      mean   = mean(c_across(4:ncol(x))),
-      p97.5  = quantile(c_across(4:ncol(x)), 0.975),
-      max    = max(c_across(4:ncol(x))),
-      sd     = sd(c_across(4:ncol(x)))
+      min    = min(c_across(5:ncol(x))),
+      p2.5   = quantile(c_across(5:ncol(x)), 0.025),
+      median = median(c_across(5:ncol(x))),
+      mean   = mean(c_across(5:ncol(x))),
+      p97.5  = quantile(c_across(5:ncol(x)), 0.975),
+      max    = max(c_across(5:ncol(x))),
+      sd     = sd(c_across(5:ncol(x)))
     ) %>%
     ungroup()
   

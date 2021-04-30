@@ -38,4 +38,4 @@ for i in $states; do
 	fi
 done
 echo $state_jobs
-#sbatch --dependency=afterok:$state_jobs $code_repo/slurm_scripts/gitpush.slurm
+sbatch --dependency=afterok:$state_jobs $code_repo/slurm_scripts/gitpush.slurm

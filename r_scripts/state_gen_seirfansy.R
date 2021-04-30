@@ -77,20 +77,13 @@ if (!dir.exists(wd)) {
   message("Creating ", wd)
 }
 
-write_rds(result$prediction, paste0(data_repo, today, "/prediction_", state, ".rds"),
-         compress = "gz")
-write_rds(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".rds"),
-          compress = "gz")
-
-prediction <- result$prediction
-dim(prediction)
-
-# prepare and important metrics ----------
-pred_clean <- clean_prediction(prediction,
-                               state = pop %>% filter(abbrev == tolower(state)) %>% pull(full) %>% unique(),
+pred_clean <- clean_prediction(result$prediction,
+                               state    = pop %>% filter(abbrev == tolower(state)) %>% pull(full) %>% unique(),
                                obs_days = obs_days,
-                               t_pred = t_pred)
-write_csv(pred_clean, paste0(data_repo, today, "/prediction_", state, ".csv"))
+                               t_pred   = t_pred)
+
+write_tsv(pred_clean, paste0(data_repo, today, "/prediction_", state, ".txt"))
+write_tsv(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".txt"))
 
 p_pred <- pred_clean %>%
   filter(section == "positive_reported") %>%
@@ -125,4 +118,4 @@ impo <- tibble(
   "ifr"                   = ifr[obs_days + 1]
 )
 
-write_csv(impo, paste0(data_repo, today, "/important_", state, ".csv"))
+write_tsv(impo, paste0(data_repo, today, "/important_", state, ".txt"))

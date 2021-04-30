@@ -24,10 +24,17 @@ clean_prediction <- function(x, state, obs_days, t_pred) {
       date    = rep(as.Date(min_date:(min_date + (obs_days + t_pred - 1)), origin = "1970-01-01"), 14),
       pred    = rep(c(rep(0, obs_days), rep(1, t_pred)), 14)
     ) %>%
-    dplyr::select(state, section, date, pred, everything())
-    # group_by(section) %>%
-    # group_split()
+    dplyr::select(state, section, date, pred, everything()) %>%
+    rowwise(state, section, date, pred) %>%
+    summarize(
+      min    = min(c_across(4:ncol(x))),
+      p2.5   = quantile(c_across(4:ncol(x)), 0.025),
+      median = median(c_across(4:ncol(x))),
+      mean   = mean(c_across(4:ncol(x))),
+      p97.5  = quantile(c_across(4:ncol(x)), 0.975),
+      max    = max(c_across(4:ncol(x))),
+      sd     = sd(c_across(4:ncol(x)))
+    ) %>%
+    ungroup()
   
 }
-
-# clean_prediction(prediction, obs_days = obs_days, t_pred = t_pred)

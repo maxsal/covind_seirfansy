@@ -101,7 +101,7 @@ d_pred <- pred_clean %>%
   rowMeans()
 
 t_d <- r_pred + d_pred + p_pred
-total_pred <- rowSums(matrix(rowMeans(prediction), nrow = obs_days + t_pred)[, 3:9])
+total_pred <- rowSums(matrix(rowMeans(result$prediction), nrow = obs_days + t_pred)[, 3:9])
 UF_p <- total_pred / t_d
 
 d_u <- pred_clean %>%

@@ -83,7 +83,7 @@ pred_clean <- clean_prediction(result$prediction,
                                t_pred   = t_pred)
 
 write_tsv(pred_clean, paste0(data_repo, today, "/prediction_", state, ".txt"))
-write_tsv(result$mcmc_pars, paste0(data_repo, today, "/prediction_pars_", state, ".txt"))
+write_tsv(as_tibble(result$mcmc_pars, .name_repair = "unique"), paste0(data_repo, today, "/prediction_pars_", state, ".txt"))
 
 p_pred <- pred_clean %>%
   filter(section == "positive_reported") %>%

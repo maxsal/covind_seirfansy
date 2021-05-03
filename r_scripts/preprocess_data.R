@@ -28,7 +28,7 @@ jhu.data <- reduce(imap(jhu.files,
     function(file, var)
     {
         vroom(file) %>%
-        select(Country = matches("Country"), matches("[0-9]+")) %>%
+        dplyr::select(Country = matches("Country"), matches("[0-9]+")) %>%
         filter(Country %in% countries) %>%
         mutate(Country = as.factor(case_when(
             Country == "Korea, South" ~  "South Korea",
@@ -63,7 +63,8 @@ states.map <- c("Andhra Pradesh" =  "AP", "Arunachal Pradesh" =  "AR",
 	"Chandigarh" =  "CH", "Dadra and Nagar Haveli" =  "DH",
 	"Daman and Diu" = "DD", "Delhi" =  "DL", "Lakshadweep" =  "LD",
 	"Pondicherry" =  "PY", "Telangana" =  "TG", "Dadra and Nagar Haveli" =  "DN",
-	"Chhattisgarh" =  "CT", "Ladakh" =  "LA", "Uttarakhand" =  "UT"
+	"Chhattisgarh" =  "CT", "Ladakh" =  "LA", "Uttarakhand" =  "UT",
+	"India" = "TT"
 )
 
 x <- names(states.map)
@@ -74,7 +75,7 @@ request <- GET("https://api.covid19india.org/states_daily.json")
 json    <- content(request)
 data    <- map_dfr(json[[1]], ~ .x)
 
-data$tt <- NULL
+#data$tt <- NULL
 state.codes <- setdiff(names(data), c("date", "status", "dateymd"))
 data <- data %>%
   pivot_longer(
@@ -82,8 +83,8 @@ data <- data %>%
     values_to = "count",
     cols = !!state.codes
     ) %>%
-  select(-date) %>%
-  select(
+  dplyr::select(-date) %>%
+  dplyr::select(
     date = dateymd, status, state, count
   ) %>%
   mutate(

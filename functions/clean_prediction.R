@@ -17,7 +17,7 @@ clean_prediction <- function(x, state, obs_days, t_pred) {
     "unreported_daily"
   )
   
-  as_tibble(x) %>%
+  as_tibble(x, .name_repair = "unique") %>%
     mutate(
       state   = state,
       section = rep(vals, each = obs_days + t_pred),
@@ -33,8 +33,8 @@ clean_prediction <- function(x, state, obs_days, t_pred) {
       mean   = mean(c_across()),
       p97.5  = quantile(c_across(), 0.975),
       max    = max(c_across()),
-      sd     = sd(c_across())
-    ) %>%
-    ungroup()
+      sd     = sd(c_across()),
+      .groups = "drop"
+    )
   
 }

@@ -9,10 +9,6 @@ source("libraries.R")
 f <- list.files(here("functions"))
 for (i in seq_along(f)) { source(here("functions", f[i])) }
 
-# ADD GLOBAL VARIABLES HERE
-# ADD GLOBAL VARIABLES HERE
-# ADD GLOBAL VARIABLES HERE
-
 n_date <- 61
 
 #lf <- list.files("C:/Users/mkleinsa/Documents/covind_seirfansy_data/2021-04-28")

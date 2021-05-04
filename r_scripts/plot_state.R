@@ -1,9 +1,10 @@
-
+suppressPackageStartupMessages({
+library(vroom)
 library(here)
 library(tidyverse)
 library(glue)
 library(ggtext)
-
+})
 source("libraries.R")
 
 f <- list.files(here("functions"))
@@ -25,8 +26,8 @@ state_codes <- vroom(paste0(data_repo, today, "/covid19india_data.csv"), col_typ
 
 for (i in seq_along(state_codes)) {
   message(glue("***beep boop*** {state_codes[i]}"))
-  tmp_prediction <- read_csv(paste0(data_repo, today, "/prediction_", # change to data repo
-                                    tolower(state_codes[i]), ".csv"),
+  tmp_prediction <- read_tsv(paste0(data_repo, today, "/prediction_", # change to data repo
+                                    tolower(state_codes[i]), ".txt"),
                              col_types = cols()) %>%
     dplyr::filter(pred == 1) %>%                                           # drop in future
     dplyr::rowwise(state, section, date, pred) %>%                         # drop in future

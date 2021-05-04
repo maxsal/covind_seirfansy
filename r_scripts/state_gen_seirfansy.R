@@ -1,4 +1,6 @@
+suppressPackageStartupMessages({
 library(here)
+})
 source("libraries.R")
 
 f <- list.files(here("functions"))

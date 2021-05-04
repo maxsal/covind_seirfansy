@@ -122,7 +122,7 @@ death_plt <- death_dat %>%
 gA <- ggplotGrob(case_plt + theme(legend.position = "none"))
 gB <- ggplotGrob(death_plt)
 
-cairo_pdf(filename = here("fig", glue("prediction_stackplot.pdf")), # change output path
+cairo_pdf(filename = paste0(data_repo, today, "/prediction_stackplot.pdf"), # change output path
           width = 8, height = 10)
 grid::grid.newpage()
 grid::grid.draw(rbind(gA, gB))
@@ -155,7 +155,7 @@ case_dat %>%
     legend.position    = "none",
     plot.caption       = element_markdown(hjust = 0)
   )
-ggsave(here("fig", glue("prediction_casegrid.pdf")), width = 10, height = 8, device = cairo_pdf)  # change output path
+ggsave(paste0(data_repo, today, "/prediction_casegrid.pdf"), width = 10, height = 8, device = cairo_pdf)  # change output path
 
 death_dat %>%
   ggplot(aes(x = date, y = value, group = state)) +
@@ -184,4 +184,4 @@ death_dat %>%
     legend.position    = "none",
     plot.caption       = element_markdown(hjust = 0)
   )
-ggsave(here("fig", glue("prediction_deathgrid.pdf")), width = 12, height = 8, device = cairo_pdf)  # change output path
+ggsave(paste0(data_repo, today, "/prediction_deathgrid.pdf"), width = 12, height = 8, device = cairo_pdf)  # change output path

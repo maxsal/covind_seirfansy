@@ -20,7 +20,7 @@ export production=TRUE
 export code_repo="$HOME/covind_seirfansy/"
 export data_repo="$HOME/covind_seirfansy_data/"
 
-module load Rgeospatial/3.6.1-2019-09-29
+module load Rtidyverse/4.0.3
 
 gitpull=$(sbatch $code_repo/slurm_scripts/git_pull_JHU.slurm | awk '{print $NF}')
 preprocess=$(sbatch --dependency=afterok:$gitpull $code_repo/slurm_scripts/preprocess_data.slurm | awk '{print $NF}')

@@ -25,7 +25,6 @@ module load Rtidyverse/4.0.3
 gitpull=$(sbatch $code_repo/slurm_scripts/git_pull_JHU.slurm | awk '{print $NF}')
 preprocess=$(sbatch --dependency=afterok:$gitpull $code_repo/slurm_scripts/preprocess_data.slurm | awk '{print $NF}')
 sleep 120
-#states="AN TG"
 states=$(Rscript $code_repo/r_scripts/get_states.R)
 state_jobs=""
 for i in $states; do

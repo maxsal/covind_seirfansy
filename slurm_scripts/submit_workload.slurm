@@ -37,7 +37,7 @@ for i in $states; do
 	fi
 done
 echo $state_jobs
-plots=$(sbatch --dependency=afterok:$state_jobs $code_repo/slurm_scripts/plot_state.slurm | awk '{print $NF}')
+plots=$(sbatch --dependency=afterany:$state_jobs $code_repo/slurm_scripts/plot_state.slurm | awk '{print $NF}')
 sbatch --dependency=afterok:$plots $code_repo/slurm_scripts/gitpush.slurm
 
 sbatch --begin=now+24hour $code_repo/slurm_scripts/submit_workload.slurm

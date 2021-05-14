@@ -18,7 +18,7 @@ today <- Sys.getenv("today")
 
 state_codes <- vroom(paste0(data_repo, today, "/covid19india_data.csv"), col_types = cols()) %>%
   group_by(State) %>%
-  filter(Date == max(Date) & State != "un" & State != "la" & State != "dd" & State != "hp") %>%
+  filter(Date == max(Date) & State != "un" & State != "la" & State != "dd" & State != "hp" & State != "py") %>%
   ungroup() %>%
   pull(State)
 #state_codes <- gsub(".rds", "", gsub("prediction_pars_", "", lf[grepl(lf, pattern = "prediction_pars")])) # change to get_states
